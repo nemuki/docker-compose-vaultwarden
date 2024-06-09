@@ -1,0 +1,26 @@
+services:
+  vaultwarden:
+    container_name: vaultwarden
+    image: vaultwarden/server:1.30.5
+    restart: always
+    environment:
+      DOMAIN: "https://vaultwarden.localhost" # Your domain; vaultwarden needs to know it's https to work properly with attachments
+      SIGNUPS_ALLOWED: "true"
+    volumes:
+      - ./vw-data:/data
+
+  caddy:
+    container_name: caddy
+    image: caddy:2.8.4
+    restart: always
+    ports:
+      - 80:80 # Needed for the ACME HTTP-01 challenge.
+      - 443:443
+      - 443:443/udp # Needed for HTTP/3.
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy-config:/config
+      - ./caddy-data:/data
+    environment:
+      DOMAIN: "https://vaultwarden.localhost" # Your domain.
+      LOG_FILE: "/data/access.log"
