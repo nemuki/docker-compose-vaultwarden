@@ -7,8 +7,8 @@ services:
       DOMAIN: "https://vaultwarden.localhost" # Your domain; vaultwarden needs to know it's https to work properly with attachments
       SIGNUPS_ALLOWED: "true"
     volumes:
-      - type: bind
-        source: ./vw-data
+      - type: volume
+        source: vw-data
         target: /data
 
   caddy:
@@ -24,12 +24,17 @@ services:
         source: ./Caddyfile
         target: /etc/caddy/Caddyfile
         read_only: true
-      - type: bind
-        source: ./caddy-config
+      - type: volume
+        source: caddy-config
         target: /config
-      - type: bind
-        source: ./caddy-data
+      - type: volume
+        source: caddy-data
         target: /data
     environment:
       DOMAIN: "https://vaultwarden.localhost" # Your domain.
       LOG_FILE: "/data/access.log"
+
+volumes:
+  vw-data:
+  caddy-data:
+  caddy-config:
