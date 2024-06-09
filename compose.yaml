@@ -19,6 +19,9 @@ services:
       - 80:80 # Needed for the ACME HTTP-01 challenge.
       - 443:443
       - 443:443/udp # Needed for HTTP/3.
+    environment:
+      DOMAIN: "https://vaultwarden.localhost" # Your domain.
+      LOG_FILE: "/data/access.log"
     volumes:
       - type: bind
         source: ./Caddyfile
@@ -30,9 +33,6 @@ services:
       - type: volume
         source: caddy-data
         target: /data
-    environment:
-      DOMAIN: "https://vaultwarden.localhost" # Your domain.
-      LOG_FILE: "/data/access.log"
 
 volumes:
   vw-data:
